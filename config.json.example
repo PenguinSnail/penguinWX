@@ -1,0 +1,35 @@
+{
+	"tleURL": "https://www.celestrak.com/NORAD/elements/weather.txt",
+	"location": [20.0000, -10.0000, 100],
+	"dataDir": "./data",
+	"satellites": [
+		{
+			"name": "NOAA 19",
+			"noaa": true,
+			"freq": 137100000,
+			"samplerate": 50000,
+			"gain": 35
+		},
+		{
+			"name": "NOAA 18",
+			"noaa": true,
+			"freq": 137900000,
+			"samplerate": 50000,
+			"gain": 35
+		},
+		{
+			"name": "METEOR-M 2",
+			"noaa": false,
+			"freq": 137100000,
+			"samplerate": 150000,
+			"gain": 35
+		},
+		{
+			"name": "METEOR-M2 2",
+			"noaa": false,
+			"freq": 137100000,
+			"samplerate": 150000,
+			"gain": 35
+		}
+	]
+}

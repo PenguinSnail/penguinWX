@@ -1,8 +1,28 @@
 const { spawn } = require('child_process');
+const fs = require('fs');
+
+// load config
+let config = require(__dirname + '/config.json');
+console.log('Config loaded');
+// update config paths
+console.log('Updating paths...');
+if (config.dataDir.charAt(0) !== '/') {
+	config.dataDir = __dirname + '/' + config.dataDir;
+};
+config.tleFile = config.dataDir + '/tledb.txt';
+
 const pass = JSON.parse(process.argv.slice(2)[0]);
 
-console.log(pass);
-const path = pass.sat.name.replace(/\s/g, '');
+let date = new Date(pass.start).toLocaleString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit', hour: 'numeric', minute: 'numeric', hour12: false});
+date = date.replace(/,/g, '').replace(/:/g, ' ').replace(/\//g, ' ').split(' ');
+date = date[2] + '-' + date[0] + '-' + date[1] + '_' + date[3] + '-' + date[4];
+
+const name = pass.sat.name.replace(/\s/g, '') + '_' + date;
+const path = config.dataDir + '/' + name + '/';
+
+if (!fs.existsSync(path)){
+	fs.mkdirSync(path);
+}
 
 let rtl;
 let sox;
@@ -10,11 +30,11 @@ let recordTimer;
 
 if (pass.sat.noaa) {
 	rtl = spawn('rtl_fm', ['-f', pass.sat.freq, '-s', pass.sat.samplerate, '-g', pass.sat.gain, '-E', 'wav', '-']);
-	sox = spawn('sox', ['-t', 'wav', '-', path + '/' + path + '.wav', 'gain', '-n', 'remix', '1-2', 'rate', '11025']);
+	sox = spawn('sox', ['-t', 'wav', '-', path + name + '.wav', 'gain', '-n', 'remix', '1-2', 'rate', '11025']);
 
 } else if (!pass.sat.noaa) {
 	rtl = spawn('rtl_fm', ['-M', 'raw', '-f', pass.sat.freq, '-s', pass.sat.samplerate, '-g', pass.sat.gain, '-']);
-	sox = spawn('sox', ['-t', 'raw', '-r', pass.sat.samplerate, '-c', '2', '-b', '16', '-e', 's', '-', '-t', 'wav', path + '.raw.wav', 'rate', pass.sat.samplerate])
+	sox = spawn('sox', ['-t', 'raw', '-r', pass.sat.samplerate, '-c', '2', '-b', '16', '-e', 's', '-', '-t', 'wav', path + name + '.raw.wav', 'rate', pass.sat.samplerate]);
 
 } else {
 	process.exit(1);

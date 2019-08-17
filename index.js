@@ -32,7 +32,7 @@ const afterChecks = () => {
 
 		let passCommand = new Readable;
 		passCommand._read = () => {};
-		passCommand.push('node ' + __dirname + '/recieve.js "' + JSON.stringify(pass) + '"');
+		passCommand.push('node ' + __dirname + '/recieve.js \'' + JSON.stringify(pass) + '\'');
 		passCommand.push(null);
 
 		let at = spawn('at', dateString.split(' '));

@@ -39,7 +39,7 @@ const afterChecks = () => {
 
 		passCommand.pipe(at.stdin);
 	});
-	
+
 	let reScheduleComponents = reScheduleDate.toLocaleString(undefined, {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'}).replace(/,/g, '').split(' ');
 	let reScheduleDateString = reScheduleComponents[3] + ' ' + reScheduleComponents[4] + ' ' + reScheduleComponents[0] + ' ' + reScheduleComponents[1] + ' ' + reScheduleComponents[2];
 	
@@ -60,7 +60,14 @@ console.log('Checking shell dependencies...');
 checkDeps().then(() => {
 	// check if tle file is out of date (older than 2 days)
 	const date = new Date();
-	if (fs.statSync(config.tleFile).mtime < new Date(date.setDate(date.getDate() - 2))) {
+	if (!fs.existsSync(config.tleFile)) {
+		// update TLE database from internet
+		console.log('Creating TLE database from ' + config.tleURL);
+		updateTLE(config.tleURL, config.tleFile).then(() => {
+			console.log('TLE database successfully created!');
+			afterChecks();
+		});
+	} else if (fs.statSync(config.tleFile).mtime < new Date(date.setDate(date.getDate() - 2))) {
 		// update TLE database from internet
 		console.log('Updating TLE database from ' + config.tleURL);
 		updateTLE(config.tleURL, config.tleFile).then(() => {

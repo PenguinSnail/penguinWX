@@ -30,7 +30,7 @@ let recordTimer;
 
 if (pass.sat.noaa) {
 	rtl = spawn('rtl_fm', ['-f', pass.sat.freq, '-s', pass.sat.samplerate, '-g', pass.sat.gain, '-E', 'wav', '-']);
-	sox = spawn('sox', ['-t', 'raw', '-r', pass.sat.samplerate, '-c', '2', '-e', 's', '-b', '16', '-', '-t', 'wav', path + name + '.wav', 'gain', '-n', 'remix', '1-2', 'rate', '11025']);
+	sox = spawn('sox', ['-t', 'raw', '-r', pass.sat.samplerate, '-c', '2', '-e', 's', '-b', '16', '-', '-t', 'wav', path + name + 'pregain.wav', 'remix', '1-2', 'rate', '11025']);
 
 } else if (!pass.sat.noaa) {
 	rtl = spawn('rtl_fm', ['-M', 'raw', '-f', pass.sat.freq, '-s', pass.sat.samplerate, '-g', pass.sat.gain, '-']);
@@ -50,11 +50,11 @@ sox.stderr.on('data', (data) => {
 	console.log(data.toString());
 });
 // stop timer if sdr/sox exits unexpectedly
-rtl.on('exit', (code) => {
-	if (code !== 0) {clearTimeout(recordTimer)};
+rtl.on('exit', () => {
+	clearTimeout(recordTimer);
 });
-sox.on('exit', (code) => {
-	if (code !== 0) {clearTimeout(recordTimer)};
+sox.on('exit', () => {
+	clearTimeout(recordTimer);
 })
 
 recordTimer = setTimeout(() => {

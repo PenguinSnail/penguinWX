@@ -29,36 +29,33 @@ let sox;
 let recordTimer;
 
 if (pass.sat.noaa) {
-	rtl = spawn('rtl_fm', ['-f', pass.sat.freq, '-s', pass.sat.samplerate, '-g', pass.sat.gain, '-E', 'wav', path + name + '.pre.wav']);
+	rtl = spawn('rtl_fm', ['-f', pass.sat.freq, '-s', pass.sat.samplerate, '-g', pass.sat.gain, '-E', 'wav', '-']);
+	sox = spawn('sox', ['-t', 'raw', '-r', pass.sat.samplerate, '-c', '2', '-e', 's', '-b', '16', '-', '-t', 'wav', path + name + '.wav', 'gain', '-n', 'remix', '1-2', 'rate', '11025']);
 
 } else if (!pass.sat.noaa) {
 	rtl = spawn('rtl_fm', ['-M', 'raw', '-f', pass.sat.freq, '-s', pass.sat.samplerate, '-g', pass.sat.gain, '-']);
-	sox = spawn('sox', ['-t', 'raw', '-r', pass.sat.samplerate, '-c', '2', '-b', '16', '-e', 's', '-', '-t', 'wav', path + name + '.raw.wav', 'rate', pass.sat.samplerate]);
-
-	// pipe sdr to sox
-	rtl.stdout.pipe(sox.stdin);
-	// log sox output to console
-	sox.stderr.on('data', (data) => {
-		console.log(data.toString());
-	});
-	sox.on('exit', (code) => {
-		if (code !== 0) {clearTimeout(recordTimer)};
-	});
+	sox = spawn('sox', ['-t', 'raw', '-r', pass.sat.samplerate, '-c', '2', '-e', 's', '-b', '16', '-', '-t', 'wav', path + name + '.raw.wav', 'rate', pass.sat.samplerate]);
 
 } else {
 	process.exit(1);
 }
 
-
-// log sdr text output
+// pipe sdr to sox
+rtl.stdout.pipe(sox.stdin);
+// log sdr/sox text output
 rtl.stderr.on('data', (data) => {
 	console.log(data.toString());
 });
-
+sox.stderr.on('data', (data) => {
+	console.log(data.toString());
+});
 // stop timer if sdr/sox exits unexpectedly
 rtl.on('exit', (code) => {
 	if (code !== 0) {clearTimeout(recordTimer)};
 });
+sox.on('exit', (code) => {
+	if (code !== 0) {clearTimeout(recordTimer)};
+})
 
 recordTimer = setTimeout(() => {
 	rtl.kill();
@@ -69,9 +66,7 @@ recordTimer = setTimeout(() => {
 const exit = () => {
 	console.log('killing child processes');
 	rtl.kill();
-	if (!pass.sat.noaa) {
-		sox.kill();
-	}
+	sox.kill();
 };
 process.on('SIGINT', exit); // catch ctrl-c
 process.on('SIGTERM', exit); // catch kill

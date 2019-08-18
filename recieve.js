@@ -1,6 +1,9 @@
 const { spawn } = require('child_process');
 const fs = require('fs');
 
+const processNOAA = require('./lib/processNOAA.js');
+const processMETEOR = require('./lib/processMETEOR.js');
+
 // load config
 let config = require(__dirname + '/config.json');
 console.log('Config loaded');
@@ -57,9 +60,14 @@ sox.on('exit', () => {
 	clearTimeout(recordTimer);
 })
 
-recordTimer = setTimeout(() => {
-	rtl.kill();
-	sox.kill();
+recordTimer = setTimeout(async () => {
+	await rtl.kill();
+	await sox.kill();
+	if (pass.noaa) {
+		processNOAA(pass, path, name);
+	} else {
+		processMETEOR(pass, path, name);
+	}
 }, pass.duration);
 
 // kill child processes on exit

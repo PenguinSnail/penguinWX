@@ -7,14 +7,14 @@
 			"name": "NOAA 19",
 			"noaa": true,
 			"freq": 137100000,
-			"samplerate": 50000,
+			"samplerate": 60000,
 			"gain": 35
 		},
 		{
 			"name": "NOAA 18",
 			"noaa": true,
 			"freq": 137900000,
-			"samplerate": 50000,
+			"samplerate": 60000,
 			"gain": 35
 		},
 		{

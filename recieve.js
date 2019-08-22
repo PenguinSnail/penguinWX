@@ -32,12 +32,12 @@ let sox;
 let recordTimer;
 
 if (pass.sat.noaa) {
-	rtl = spawn('rtl_fm', ['-f', pass.sat.freq, '-s', pass.sat.samplerate, '-g', pass.sat.gain, '-E', 'wav', '-']);
-	sox = spawn('sox', ['-t', 'raw', '-r', pass.sat.samplerate, '-c', '2', '-e', 's', '-b', '16', '-', '-t', 'wav', path + name + 'pregain.wav', 'remix', '1-2', 'rate', '11025']);
+	rtl = spawn('rtl_fm', ['-M', 'fm', '-f', pass.sat.freq, '-s', pass.sat.samplerate, '-g', pass.sat.gain, '-E', 'deemp', '-F', '9', '-']);
+	sox = spawn('sox', ['-t', 'raw', '-r', pass.sat.samplerate, '-c', '2', '-e', 's', '-b', '16', '-', '-t', 'wav', path + name + '.pregain.wav', 'remix', '1-2', 'rate', '11025']);
 
 } else if (!pass.sat.noaa) {
 	rtl = spawn('rtl_fm', ['-M', 'raw', '-f', pass.sat.freq, '-s', pass.sat.samplerate, '-g', pass.sat.gain, '-']);
-	sox = spawn('sox', ['-t', 'raw', '-r', pass.sat.samplerate, '-c', '2', '-e', 's', '-b', '16', '-', '-t', 'wav', path + name + '.raw.wav', 'rate', pass.sat.samplerate]);
+	sox = spawn('sox', ['-t', 'raw', '-r', pass.sat.samplerate, '-c', '2', '-e', 's', '-b', '16', '-', '-t', 'wav', path + name + '.raw.wav', 'rate', '140000']);
 
 } else {
 	process.exit(1);
@@ -63,10 +63,10 @@ sox.on('exit', () => {
 recordTimer = setTimeout(async () => {
 	await rtl.kill();
 	await sox.kill();
-	if (pass.noaa) {
-		processNOAA(pass, path, name);
+	if (pass.sat.noaa) {
+		processNOAA(config, pass, path, name);
 	} else {
-		processMETEOR(pass, path, name);
+		processMETEOR(config, pass, path, name);
 	}
 }, pass.duration);
 

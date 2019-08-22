@@ -13,13 +13,14 @@
 		{
 			"name": "NOAA 18",
 			"noaa": true,
-			"freq": 137900000,
+			"freq": 137912500,
 			"samplerate": 60000,
 			"gain": 35
 		},
 		{
 			"name": "METEOR-M 2",
 			"noaa": false,
+			"modulation": "qpsk",
 			"freq": 137100000,
 			"samplerate": 150000,
 			"gain": 35
@@ -27,7 +28,8 @@
 		{
 			"name": "METEOR-M2 2",
 			"noaa": false,
-			"freq": 137100000,
+			"modulation": "oqpsk",
+			"freq": 137900000,
 			"samplerate": 150000,
 			"gain": 35
 		}

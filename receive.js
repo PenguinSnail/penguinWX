@@ -55,14 +55,16 @@ sox.stderr.on('data', (data) => {
 // stop timer if sdr/sox exits unexpectedly
 rtl.on('exit', () => {
 	clearTimeout(recordTimer);
+	console.log('rtl exited')
 });
 sox.on('exit', () => {
 	clearTimeout(recordTimer);
+	console.log('sox exited')
 })
 
-recordTimer = setTimeout(async () => {
-	await rtl.kill();
-	await sox.kill();
+recordTimer = setTimeout(() => {
+	rtl.kill();
+	sox.kill();
 	if (pass.sat.noaa) {
 		processNOAA(config, pass, path, name);
 	} else {
@@ -78,4 +80,4 @@ const exit = () => {
 };
 process.on('SIGINT', exit); // catch ctrl-c
 process.on('SIGTERM', exit); // catch kill
-process.on('exit', exit); // catch exit
+//process.on('exit', exit); // catch exit

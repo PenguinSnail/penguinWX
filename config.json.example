@@ -14,7 +14,7 @@
 			"freq": 137100000,
 			"samplerate": 60000,
 			"gain": 35,
-			"email": true
+			"email": false
 		},
 		{
 			"name": "NOAA 18",
@@ -22,23 +22,15 @@
 			"freq": 137912500,
 			"samplerate": 60000,
 			"gain": 35,
-			"email": true
+			"email": false
 		},
 		{
 			"name": "METEOR-M 2",
 			"noaa": false,
-			"modulation": "qpsk",
 			"freq": 137100000,
-			"samplerate": 160000,
-			"gain": 35
-		},
-		{
-			"name": "METEOR-M2 2",
-			"noaa": false,
-			"modulation": "oqpsk",
-			"freq": 137900000,
-			"samplerate": 160000,
-			"gain": 35
+			"samplerate": 150000,
+			"gain": 40,
+			"email": false
 		}
 	]
 }

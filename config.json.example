@@ -4,7 +4,8 @@
 	"dataDir": "./data",
 	"email": {
 		"user": "bob@gmail.com",
-		"pass": "secretpassword"
+		"pass": "secretpassword",
+		"receiveAddress": "youremail@domain.com"
 	},
 	"satellites": [
 		{

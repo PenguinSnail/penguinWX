@@ -33,7 +33,7 @@ let recordTimer;
 
 if (pass.sat.noaa) {
 	rtl = spawn('rtl_fm', ['-M', 'fm', '-f', pass.sat.freq, '-s', pass.sat.samplerate, '-g', pass.sat.gain, '-E', 'deemp', '-F', '9', '-']);
-	sox = spawn('sox', ['-t', 'raw', '-r', pass.sat.samplerate, '-c', '2', '-e', 's', '-b', '16', '-', '-t', 'wav', path + name + '.pregain.wav', 'remix', '1-2', 'rate', '11025']);
+	sox = spawn('sox', ['-t', 'raw', '-r', pass.sat.samplerate, '-c', '1', '-e', 's', '-b', '16', '-', '-t', 'wav', path + name + '.pregain.wav', 'rate', '11025']);
 
 } else if (!pass.sat.noaa) {
 	rtl = spawn('rtl_fm', ['-M', 'raw', '-f', pass.sat.freq, '-s', pass.sat.samplerate, '-g', pass.sat.gain, '-']);

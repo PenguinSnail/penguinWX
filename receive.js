@@ -60,18 +60,17 @@ rtl.on('exit', () => {
 sox.on('exit', () => {
 	clearTimeout(recordTimer);
 	console.log('sox exited')
-})
+});
 
-recordTimer = setTimeout(() => {
-	rtl.kill().then(() => {
-		sox.kill().then(() => {
-			if (pass.sat.noaa) {
-				processNOAA(config, pass, path, name);
-			} else {
-				processMETEOR(config, pass, path, name);
-			};
-		});
-	});
+recordTimer = setTimeout(async () => {
+	await rtl.stdout.unpipe();
+	await rtl.kill();
+	await sox.kill();
+	if (pass.sat.noaa) {
+		processNOAA(config, pass, path, name);
+	} else {
+		processMETEOR(config, pass, path, name);
+	};
 }, pass.duration);
 
 // kill child processes on exit

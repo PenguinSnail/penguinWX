@@ -62,15 +62,18 @@ sox.on('exit', () => {
 	console.log('sox exited')
 });
 
-recordTimer = setTimeout(async () => {
-	await rtl.stdout.unpipe();
-	await rtl.kill();
-	await sox.kill();
-	if (pass.sat.noaa) {
-		processNOAA(config, pass, path, name);
-	} else {
-		processMETEOR(config, pass, path, name);
-	};
+recordTimer = setTimeout(() => {
+	rtl.on('exit', () => {
+		sox.kill();
+	});
+	sox.on('exit', () => {
+		if (pass.sat.noaa) {
+			processNOAA(config, pass, path, name);
+		} else {
+			processMETEOR(config, pass, path, name);
+		};
+	});
+	rtl.kill();	
 }, pass.duration);
 
 // kill child processes on exit
@@ -81,4 +84,4 @@ const exit = () => {
 };
 process.on('SIGINT', exit); // catch ctrl-c
 process.on('SIGTERM', exit); // catch kill
-//process.on('exit', exit); // catch exit
+process.on('exit', exit); // catch exit

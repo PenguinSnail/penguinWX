@@ -7,6 +7,12 @@
 		"pass": "secretpassword",
 		"receiveAddress": "youremail@domain.com"
 	},
+	"twitter": {
+		"consumer_key": "XXXX",
+		"consumer_secret": "XXXX",
+		"access_token": "XXXX",
+		"access_token_secret": "XXXX"
+	},
 	"satellites": [
 		{
 			"name": "NOAA 19",
@@ -14,7 +20,8 @@
 			"freq": 137100000,
 			"samplerate": 60000,
 			"gain": 35,
-			"email": false
+			"email": false,
+			"tweet": false
 		},
 		{
 			"name": "NOAA 18",
@@ -22,7 +29,8 @@
 			"freq": 137912500,
 			"samplerate": 60000,
 			"gain": 35,
-			"email": false
+			"email": false,
+			"tweet": false
 		},
 		{
 			"name": "METEOR-M 2",
@@ -30,7 +38,8 @@
 			"freq": 137100000,
 			"samplerate": 150000,
 			"gain": 40,
-			"email": false
+			"email": false,
+			"tweet": false
 		}
 	]
 }

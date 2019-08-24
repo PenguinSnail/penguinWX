@@ -73,7 +73,7 @@ recordTimer = setTimeout(() => {
 			processMETEOR(config, pass, path, name);
 		};
 	});
-	rtl.kill();	
+	rtl.kill();
 }, pass.duration);
 
 // kill child processes on exit

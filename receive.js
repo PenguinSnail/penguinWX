@@ -63,13 +63,15 @@ sox.on('exit', () => {
 })
 
 recordTimer = setTimeout(() => {
-	rtl.kill();
-	sox.kill();
-	if (pass.sat.noaa) {
-		processNOAA(config, pass, path, name);
-	} else {
-		processMETEOR(config, pass, path, name);
-	}
+	rtl.kill().then(() => {
+		sox.kill().then(() => {
+			if (pass.sat.noaa) {
+				processNOAA(config, pass, path, name);
+			} else {
+				processMETEOR(config, pass, path, name);
+			};
+		});
+	});
 }, pass.duration);
 
 // kill child processes on exit

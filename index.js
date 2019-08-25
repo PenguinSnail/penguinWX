@@ -25,7 +25,7 @@ const afterChecks = () => {
 	let reScheduleDate;
 	passSchedule.forEach((pass) => {
 		let atDate = new Date(pass.start);
-		reScheduleDate = new Date(pass.start + pass.duration + (60000 * 5));
+		reScheduleDate = new Date(pass.start + pass.duration + (60000 * 2));
 
 		let dateComponents = atDate.toLocaleString(undefined, {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'}).replace(/,/g, '').split(' ');
 		let dateString = dateComponents[3] + ' ' + dateComponents[4] + ' ' + dateComponents[0] + ' ' + dateComponents[1] + ' ' + dateComponents[2];

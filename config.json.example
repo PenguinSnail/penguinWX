@@ -13,6 +13,7 @@
 		"access_token": "XXXX",
 		"access_token_secret": "XXXX"
 	},
+	"upgradedWxtoimg": false,
 	"satellites": [
 		{
 			"name": "NOAA 19",

@@ -16,11 +16,13 @@ config.tleFile = config.dataDir + '/tledb.txt';
 
 const pass = JSON.parse(process.argv.slice(2)[0]);
 
+console.log('Beginning pass:\n' + pass);
+
 let date = new Date(pass.start).toLocaleString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit', hour: 'numeric', minute: 'numeric', hour12: false});
 date = date.replace(/,/g, '').replace(/:/g, ' ').replace(/\//g, ' ').split(' ');
 date = date[2] + '-' + date[0] + '-' + date[1] + '_' + date[3] + '-' + date[4];
 
-const name = pass.sat.name.replace(/\s/g, '') + '_' + date;
+const name = date + '_' + pass.sat.name.replace(/\s/g, '');
 const path = config.dataDir + '/' + name + '/';
 
 if (!fs.existsSync(path)){

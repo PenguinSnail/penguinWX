@@ -16,7 +16,9 @@ config.tleFile = config.dataDir + '/tledb.txt';
 
 const pass = JSON.parse(process.argv.slice(2)[0]);
 
-console.log('Beginning pass:\n' + pass);
+console.log('Beginning pass:\n');
+console.log(pass);
+console.log('\n');
 
 let date = new Date(pass.start).toLocaleString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit', hour: 'numeric', minute: 'numeric', hour12: false});
 date = date.replace(/,/g, '').replace(/:/g, ' ').replace(/\//g, ' ').split(' ');

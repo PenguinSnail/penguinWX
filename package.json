@@ -21,6 +21,7 @@
     "del": "^5.1.0",
     "jspredict": "^1.0.3",
     "nodemailer": "^6.3.0",
-    "twit": "^2.2.11"
+    "twit": "^2.2.11",
+    "typescript": "^3.6.2"
   }
 }

@@ -5,7 +5,7 @@
         "esModuleInterop": true,
         "noImplicitAny": true,
         "preserveConstEnums": true,
-        "sourceMap": true,
+        "sourceMap": false,
         "outDir": "./out/",
         "rootDir": "./src"
     },

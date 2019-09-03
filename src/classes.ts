@@ -141,19 +141,82 @@ export class pass {
 	endDate: Date
 	maxElevation: number
 	northbound: boolean
-	sat: satellite
+	satellite: satellite
 
 	constructor(data: {
 		start: number
 		end: number
 		duration: number
-		startDate: Date
-		endDate: Date
 		maxElevation: number
 		northbound: boolean
-		sat: satellite
+		satellite: satellite
 	}) {
+		// is start defined?
+		if (!data.start) {
+			console.error('PASS ERROR: start is not defined!');
+			process.exit(1);
+		// if so, is it a number?
+		} else if (typeof(data.start) !== 'number') {
+			console.error('PASS ERROR: start is not a number!');
+			process.exit(1);
+		} else {
+			this.start = data.start;
+		};
 
+		// is end defined?
+		if (!data.end) {
+			console.error('PASS ERROR: end is not defined!');
+			process.exit(1);
+		// if so, is it a number?
+		} else if (typeof(data.end) !== 'number') {
+			console.error('PASS ERROR: end is not a number!');
+			process.exit(1);
+		} else {
+			this.end = data.end;
+		};
+
+		// is duration defined?
+		if (!data.duration) {
+			console.error('PASS ERROR: duration is not defined!');
+			process.exit(1);
+		// if so, is it a number?
+		} else if (typeof(data.duration) !== 'number') {
+			console.error('PASS ERROR: duration is not a number!');
+			process.exit(1);
+		} else {
+			this.duration = data.duration;
+		};
+
+		// is maxElevation defined?
+		if (!data.maxElevation) {
+			console.error('PASS ERROR: maxElevation is not defined!');
+			process.exit(1);
+		// if so, is it a number?
+		} else if (typeof(data.maxElevation) !== 'number') {
+			console.error('PASS ERROR: maxElevation is not a number!');
+			process.exit(1);
+		} else {
+			this.maxElevation = data.maxElevation;
+		};
+
+		// is northbound flag specified?
+		// if not, default to false (southbound)
+		if (!data.northbound) {
+			this.northbound = false;
+		// if so, is it a boolean?
+		} else if (typeof(data.northbound) !== 'boolean') {
+			console.error('PASS ERROR: Northbound property is not a boolean!');
+			process.exit(1);
+		} else {
+			this.northbound = data.northbound;
+		};
+
+		// set satellite
+		this.satellite = new satellite(data.satellite);
+
+		// set dates from timestamps
+		this.startDate = new Date(data.start);
+		this.endDate = new Date(data.end);
 	};
 };
 
@@ -210,7 +273,7 @@ export class config {
 			console.error('CONFIG ERROR: location is not defined!');
 			process.exit(1);
 		// if so, is it an object
-		} else if (typeof(data.location) !== 'object') {
+		} else if (!Array.isArray(data.location)) {
 			console.error('CONFIG ERROR: location is not an array!');
 			process.exit(1);
 		// if it's an object does it have 3 elements?

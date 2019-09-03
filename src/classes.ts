@@ -264,6 +264,15 @@ export class config {
 		} else if (typeof(data.tleURL) !== 'string') {
 			console.error('CONFIG ERROR: tleURL is not a string!');
 			process.exit(1);
+		// if so, is the url body valid?
+		// regexes modified from https://github.com/segmentio/is-url
+		} else if (!data.tleURL.match(/^localhost[\:?\d]*(?:[^\:?\d]\S*)?$/) && !data.tleURL.match(/^[^\s\.]+\.\S{2,}$/)) {
+			console.error('CONFIG ERROR: tleURL is not a valid URL!');
+			process.exit(1);
+		// if so, is a protocol specified?
+		} else if (!data.tleURL.match(/^(?:http+s?:)?\/\/(\S+)$/)) {
+			console.error('CONFIG ERROR: tleURL is not a valid URL (protocol isn\'t http or https)!');
+			process.exit(1);
 		} else {
 			this.tleURL = data.tleURL;
 		};

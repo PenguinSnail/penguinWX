@@ -11,6 +11,7 @@ export class satellite {
 	gain: number
 	minElevation: number
 	maxEclipseDepth?: number
+	priority?: number
 	email: boolean
 	tweet: boolean
 	tle?: string
@@ -53,6 +54,7 @@ export class satellite {
 		gain: number
 		minElevation?: number
 		maxEclipseDepth?: number
+		priority?: number
 		email?: boolean
 		tweet?: boolean
 		tle?: string
@@ -138,9 +140,18 @@ export class satellite {
 			if (typeof(data.maxEclipseDepth) !== 'number') {
 				console.error(`SATELLITE ERROR (${data.name}): Satellite maxEclipseDepth is not a number!`);
 				process.exit(1);
-			// if so, is it a valid elevation?
 			} else {
 				this.maxEclipseDepth = data.maxEclipseDepth;
+			};
+		};
+
+		// does the satellite have a priority defined?
+		if (data.priority) {
+			if (typeof(data.priority) !== 'number') {
+				console.error(`SATELLITE ERROR (${data.name}): Satellite priority is not a number!`);
+				process.exit(1);
+			} else {
+				this.priority = data.priority;
 			};
 		}; 
 		

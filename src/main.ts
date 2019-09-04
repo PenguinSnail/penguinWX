@@ -1,6 +1,9 @@
 import * as classes from './classes';
+
 import checkDeps from './dependencies';
+
 import updateTLE from './schedule/tle';
+import createSchedule from './schedule/create';
 
 import * as path from 'path';
 import * as fs from 'fs';
@@ -10,12 +13,14 @@ const configFileContents = require('../config.json');
 let config = new classes.config(configFileContents);
 
 const afterChecks = () => {
-
+	const passSchedule = createSchedule(config);
+	
+	console.log(passSchedule);
 };
 
 // check if dependencies are met
 checkDeps().then(() => {
-	console.log('All dependencies met!');
+	console.log('All dependencies met!\n');
 
 	const date = new Date();
 	// does the TLE file exist?

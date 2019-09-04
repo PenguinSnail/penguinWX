@@ -9,6 +9,8 @@ export class satellite {
 	frequency: number
 	samplerate: number
 	gain: number
+	minElevation: number
+	maxEclipseDepth?: number
 	email: boolean
 	tweet: boolean
 	tle?: string
@@ -43,7 +45,18 @@ export class satellite {
 		};
 	};
 
-	public constructor(data: {name: string, type: string, frequency: number, samplerate: number, gain: number, email: boolean, tweet: boolean, tle?: string}) {
+	public constructor(data: {
+		name: string
+		type: string
+		frequency: number
+		samplerate: number
+		gain: number
+		minElevation?: number
+		maxEclipseDepth?: number
+		email?: boolean
+		tweet?: boolean
+		tle?: string
+	}) {
 		// does the satellite have a name defined?
 		if (!data.name) {
 			console.error('SATELLITE ERROR: Satellite name is not defined!');
@@ -103,6 +116,33 @@ export class satellite {
 		} else {
 			this.gain = data.gain;
 		};
+
+		// does the satellite have a minElevation defined?
+		if (!data.minElevation) {
+			console.warn(`SATELLITE (${data.name}): minElevation not specified!\nDefaulting to 20 degrees\n`);
+			this.minElevation = 20;
+		// if so, is it a number?
+		} else if (typeof(data.minElevation) !== 'number') {
+			console.error(`SATELLITE ERROR (${data.name}): Satellite minElevation is not a number!`);
+			process.exit(1);
+		// if so, is it a valid elevation?
+		} else if (data.minElevation < 0) {
+			console.error(`SATELLITE ERROR (${data.name}): Satellite minElevation is less than 0!`);
+			process.exit(1);
+		} else {
+			this.minElevation = data.minElevation;
+		};
+
+		// does the satellite have a maxEclipseDepth defined?
+		if (data.maxEclipseDepth) {
+			if (typeof(data.maxEclipseDepth) !== 'number') {
+				console.error(`SATELLITE ERROR (${data.name}): Satellite maxEclipseDepth is not a number!`);
+				process.exit(1);
+			// if so, is it a valid elevation?
+			} else {
+				this.maxEclipseDepth = data.maxEclipseDepth;
+			};
+		}; 
 		
 		// does the satellite have the email flag?
 		if (!data.email) {
@@ -129,7 +169,7 @@ export class satellite {
 		// if a TLE is given, check before setting
 		if (data.tle) {
 			if(!this.setTLE(data.tle)) {
-				console.warn(`SATELLITE ERROR (${data.name}): Invalid TLE format!`);
+				console.warn(`SATELLITE ERROR (${data.name}): Invalid TLE format!\n`);
 			};
 		};
 	};
@@ -142,6 +182,7 @@ export class pass {
 	startDate: Date
 	endDate: Date
 	maxElevation: number
+	avgEclipseDepth: number
 	northbound: boolean
 	satellite: satellite
 
@@ -150,6 +191,7 @@ export class pass {
 		end: number
 		duration: number
 		maxElevation: number
+		avgEclipseDepth: number
 		northbound: boolean
 		satellite: satellite
 	}) {
@@ -199,6 +241,18 @@ export class pass {
 			process.exit(1);
 		} else {
 			this.maxElevation = data.maxElevation;
+		};
+
+		// is avgEclipseDepth defined?
+		if (!data.avgEclipseDepth) {
+			console.error('PASS ERROR: avgEclipseDepth is not defined!');
+			process.exit(1);
+		// if so, is it a number?
+		} else if (typeof(data.avgEclipseDepth) !== 'number') {
+			console.error('PASS ERROR: avgEclipseDepth is not a number!');
+			process.exit(1);
+		} else {
+			this.avgEclipseDepth = data.avgEclipseDepth;
 		};
 
 		// is northbound flag specified?

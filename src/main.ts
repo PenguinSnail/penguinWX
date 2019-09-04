@@ -11,7 +11,7 @@ let config = new classes.config(configFileContents);
 
 const afterChecks = () => {
 
-}
+};
 
 // check if dependencies are met
 checkDeps().then(() => {

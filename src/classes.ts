@@ -1,3 +1,5 @@
+import * as path from 'path';
+
 // define valid satellite types
 const satTypes = ['noaa', 'meteor'];
 
@@ -224,6 +226,7 @@ export class config {
 	tleURL: string
 	location: number[]
 	dataDir: string
+	tleFile: string
 	emailSettings: {
 		user: string
 		pass: string
@@ -236,7 +239,6 @@ export class config {
 		access_token_secret: string
 	}
 	satellites: satellite[]
-	tleFile?: string
 
 	constructor(data: {
 		tleURL: string
@@ -302,7 +304,7 @@ export class config {
 			console.error('CONFIG ERROR: dataDir is not a string!');
 			process.exit(1);
 		} else {
-			this.dataDir = data.dataDir;
+			this.dataDir = path.resolve(data.dataDir);
 		};
 
 		// does emailsettings exist?
@@ -383,6 +385,21 @@ export class config {
 					this.twitterSettings = data.twitterSettings;
 				};
 			};
+		};
+
+		// was tlefile specified?
+		if (data.tleFile) {
+			// is tlefile a string?
+			if (typeof(data.tleFile) !== 'string') {
+				console.error('CONFIG ERROR: tleFile is not a string!');
+				process.exit(1);
+			// if so, resolve it as a path
+			} else {
+				this.tleFile = path.resolve(data.tleFile);
+			};
+		// if not, set the default
+		} else {
+			this.tleFile = path.resolve(data.dataDir, 'tledb.txt');
 		};
 
 		this.satellites = [];

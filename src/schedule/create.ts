@@ -190,12 +190,14 @@ export default (config: classes.config): classes.pass[] => {
 	// filter out passes flagged in the toRemove array
 	allPasses = allPasses.filter((pass) => {
 		if (toRemove.includes(pass)) {
-			console.log(`Removing low pass: ${pass.satellite.name} (${new Date(pass.start).toLocaleString()})`);
+			console.log(`Removing low priority/elevation pass: ${pass.satellite.name} (${new Date(pass.start).toLocaleString()})`);
 		} else {
 			return true;
 		};
 	});
-	console.log('\n');
+	if (toRemove.length > 0) {
+		console.log('\n');
+	};
 
 	return allPasses;
 };

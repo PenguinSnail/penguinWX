@@ -41,7 +41,7 @@ const receive = (pass: classes.pass) => {
 	// vars for our child processes
 	let rtl: ChildProcessWithoutNullStreams;
 	let sox: ChildProcessWithoutNullStreams;
-	let recordTimer: any;
+	let recordTimer: NodeJS.Timeout;
 
 	let afterRecord: any;
 

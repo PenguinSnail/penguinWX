@@ -99,7 +99,7 @@ export default (config: classes.config, pass: classes.pass, passPath: string, pa
 									});
 								} else {
 									// add processed image to image list
-									imagefiles.push(path + name + '_msa.png');
+									imagefiles.push(path.resolve(passPath, passName + '_msa.png'));
 
 									postProcessing(config, pass, passPath, passName);
 								};

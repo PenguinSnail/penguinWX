@@ -18,38 +18,57 @@ const configFileContents = require('../config.json');
 let config = new classes.config(configFileContents);
 
 const schedule = () => {
+	// create a pass schedule
 	const passSchedule = createSchedule(config);
+	// blank date to schedule creating a new schedule
+	// each time we schedule a pass this is set to 2 minutes after the pass ends
 	let reScheduleDate: Date;
 
 	console.log(passSchedule);
 
+	// for each pass
 	passSchedule.forEach((pass) => {
+		// get a date for the pass start
 		const atDate = new Date(pass.start);
+		// set the reschedule date to 2 minutes after the pass end
 		reScheduleDate = new Date(pass.start + pass.duration + (60000 * 2));
 
-		const dateComponents = atDate.toLocaleString(undefined, {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'}).replace(/,/g, '').split(' ');
+		// at takes human readable dates for scheduling, so here's some messy text parsing
+		// get a date string including local date and time
+		// split the date string at each space
+		// stitch the pieces together into a date at will take
+		const dateComponents = atDate.toLocaleString('en-US', {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'}).replace(/,/g, '').split(' ');
 		const dateString = dateComponents[3] + ' ' + dateComponents[4] + ' ' + dateComponents[0] + ' ' + dateComponents[1] + ' ' + dateComponents[2];
 
+		// at makes you pipe the command into it, so we need a stream for our command string
+		// set contents of the stream to this executable, plus a json string of our pass
 		let passCommand = new Readable;
 		passCommand._read = () => {};
 		passCommand.push('node ' + __filename + ' \'' + JSON.stringify(pass) + '\'');
 		passCommand.push(null);
 
+		// at command for scheduling with the date string passed in
 		let at = spawn('at', dateString.split(' '));
 
+		// pipe our pass command stream into at to schedule
 		passCommand.pipe(at.stdin);
 	});
 
-	const reScheduleComponents = reScheduleDate.toLocaleString(undefined, {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'}).replace(/,/g, '').split(' ');
+	// after all the passes are scheduled, format the reschedule date for at
+	// the passes are done in chronological order, so after they're all scheduled the reschedule date will be 2 minutes after the final pass
+	const reScheduleComponents = reScheduleDate.toLocaleString('en-US', {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'}).replace(/,/g, '').split(' ');
 	const reScheduleDateString = reScheduleComponents[3] + ' ' + reScheduleComponents[4] + ' ' + reScheduleComponents[0] + ' ' + reScheduleComponents[1] + ' ' + reScheduleComponents[2];
 	
+	// stream for command
 	let reSchedule = new Readable;
 	reSchedule._read = () => {};
 	reSchedule.push('node ' + __filename);
 	reSchedule.push(null);
 
+	// at command
 	let at = spawn('at', reScheduleDateString.split(' '));
 
+	// pipe the stream
 	reSchedule.pipe(at.stdin);
 };
 

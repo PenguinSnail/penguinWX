@@ -4,11 +4,15 @@ import del from 'del';
 
 import * as classes from '../../classes';
 
+import twitter from '../twitter';
+
 // initialize the image file list
-let imagefiles = [];
+let imagefiles: string[] = [];
 
 const postProcessing = (config: classes.config, pass: classes.pass, passPath: string, passName: string) => {
-
+	if (pass.satellite.tweet) {
+		twitter(config, pass, imagefiles);
+	};
 };
 
 export default (config: classes.config, pass: classes.pass, passPath: string, passName: string) => {

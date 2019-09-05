@@ -17,6 +17,7 @@
   "author": "Noah Piraino <penguinsnail@onebuttonmouse.com>",
   "license": "GPL-3.0",
   "dependencies": {
+    "@types/twit": "^2.2.22",
     "command-exists": "^1.2.8",
     "del": "^5.1.0",
     "jspredict": "^1.0.3",

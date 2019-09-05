@@ -59,7 +59,7 @@ export default (config: classes.config, pass: classes.pass, imgfiles: string[]) 
 	T = new Twit(config.twitterSettings);
 
 	// initialize media id array and upload counter
-	let mediaIds: any[];
+	let mediaIds: any[] = [];
 	let uploadCounter = 0;
 
 	// nicely formatted pass date string

@@ -6,9 +6,11 @@ import updateTLE from './schedule/tle';
 import createSchedule from './schedule/create';
 
 import processNOAA from './receive/processing/noaa';
+import processMETEOR from './receive/processing/meteor';
 
 import * as path from 'path';
 import * as fs from 'fs';
+import { Readable } from 'stream';
 import { spawn, ChildProcessWithoutNullStreams } from 'child_process';
 
 // messy config import
@@ -17,8 +19,38 @@ let config = new classes.config(configFileContents);
 
 const schedule = () => {
 	const passSchedule = createSchedule(config);
+	let reScheduleDate: Date;
 
 	console.log(passSchedule);
+
+	passSchedule.forEach((pass) => {
+		const atDate = new Date(pass.start);
+		reScheduleDate = new Date(pass.start + pass.duration + (60000 * 2));
+
+		const dateComponents = atDate.toLocaleString(undefined, {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'}).replace(/,/g, '').split(' ');
+		const dateString = dateComponents[3] + ' ' + dateComponents[4] + ' ' + dateComponents[0] + ' ' + dateComponents[1] + ' ' + dateComponents[2];
+
+		let passCommand = new Readable;
+		passCommand._read = () => {};
+		passCommand.push('node ' + __filename + ' \'' + JSON.stringify(pass) + '\'');
+		passCommand.push(null);
+
+		let at = spawn('at', dateString.split(' '));
+
+		passCommand.pipe(at.stdin);
+	});
+
+	const reScheduleComponents = reScheduleDate.toLocaleString(undefined, {year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric'}).replace(/,/g, '').split(' ');
+	const reScheduleDateString = reScheduleComponents[3] + ' ' + reScheduleComponents[4] + ' ' + reScheduleComponents[0] + ' ' + reScheduleComponents[1] + ' ' + reScheduleComponents[2];
+	
+	let reSchedule = new Readable;
+	reSchedule._read = () => {};
+	reSchedule.push('node ' + __filename);
+	reSchedule.push(null);
+
+	let at = spawn('at', reScheduleDateString.split(' '));
+
+	reSchedule.pipe(at.stdin);
 };
 
 const receive = (pass: classes.pass) => {
@@ -57,7 +89,7 @@ const receive = (pass: classes.pass) => {
 		rtl = spawn('rtl_fm', ['-M', 'raw', '-f', pass.satellite.frequency.toString(), '-s', pass.satellite.samplerate.toString(), '-g', pass.satellite.gain.toString(), '-E', 'dc', '-']);
 		sox = spawn('sox', ['-t', 'raw', '-r', pass.satellite.samplerate.toString(), '-c', '2', '-e', 's', '-b', '16', '-', '-t', 'wav', path.resolve(passPath, passName + '.raw.wav'), 'rate', pass.satellite.samplerate.toString()]);
 		afterRecord = () => {
-
+			processMETEOR(config, pass, passPath, passName);
 		};
 	} else {
 		console.error(`ERROR: Unknown satellite type ${pass.satellite.type}`);

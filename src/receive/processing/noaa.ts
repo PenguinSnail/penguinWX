@@ -27,7 +27,7 @@ export default (config: classes.config, pass: classes.pass, passPath: string, pa
 	// after normalizing
 	normalize.on('exit', () => {
 		// delete the pregain file
-		del([path.resolve(passPath, name + '.pregain.wav')]).then((deletedpaths: string[]) => {
+		del([path.resolve(passPath, passName + '.pregain.wav')]).then((deletedpaths: string[]) => {
 			console.log('Deleted files: ' + deletedpaths.join('\n'));
 
 			// generate the map overlay
@@ -41,7 +41,7 @@ export default (config: classes.config, pass: classes.pass, passPath: string, pa
 
 			wxmap.on('exit', () => {
 				// generate plain image
-				let wxtoimg = spawn('wxtoimg', [pass.northbound ? '-N' : '-S', path.resolve(passPath, name + '.wav'), path.resolve(passPath, passName + '.png')]);
+				let wxtoimg = spawn('wxtoimg', [pass.northbound ? '-N' : '-S', path.resolve(passPath, passName + '.wav'), path.resolve(passPath, passName + '.png')]);
 				wxtoimg.stdout.on('data', (data) => {
 					console.log(data.toString());
 				});

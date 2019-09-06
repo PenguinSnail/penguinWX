@@ -51,7 +51,7 @@ export default (config: classes.config, pass: classes.pass, passPath: string, pa
 			// after rectifying
 			rectify.on('exit', () => {
 				// compress to a jpeg for web useage - also scale to height of 8192 if greater than 8192 (max twitter image resolution)
-				let websize = spawn('ffmpeg', ['-i', path.resolve(passPath, passName + '-rectified.png'), '-q:v', '1', '-filter_complex', ' "scale=w=-2:h=min(8192\,ih)"', path.resolve(passPath, passName + '-rectified-websize.jpg')]);
+				let websize = spawn('ffmpeg', ['-i', path.resolve(passPath, passName + '-rectified.png'), '-q:v', '1', '-filter_complex', ' scale=w=-2:h=min(8192\\,ih)', path.resolve(passPath, passName + '-rectified-websize.jpg')]);
 				websize.stdout.on('data', (data) => {
 					console.log(data.toString());
 				});

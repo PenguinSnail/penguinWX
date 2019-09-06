@@ -12,6 +12,7 @@ export class satellite {
 	minElevation: number
 	maxEclipseDepth?: number
 	priority?: number
+	skipProcessing?: boolean
 	email: boolean
 	tweet: boolean
 	tle?: string
@@ -55,6 +56,7 @@ export class satellite {
 		minElevation?: number
 		maxEclipseDepth?: number
 		priority?: number
+		skipProcessing?: boolean
 		email?: boolean
 		tweet?: boolean
 		tle?: string
@@ -142,6 +144,16 @@ export class satellite {
 				process.exit(1);
 			} else {
 				this.maxEclipseDepth = data.maxEclipseDepth;
+			};
+		};
+
+		// do we skip processing for the satellite?
+		if (data.skipProcessing) {
+			if (typeof(data.skipProcessing) !== 'boolean') {
+				console.error(`SATELLITE ERROR (${data.name}): Satellite skipProcessing is not a boolean!`);
+				process.exit(1);
+			} else {
+				this.skipProcessing = data.skipProcessing;
 			};
 		};
 

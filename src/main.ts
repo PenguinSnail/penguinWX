@@ -94,21 +94,29 @@ const receive = (pass: classes.pass) => {
 	let sox: ChildProcessWithoutNullStreams;
 	let recordTimer: NodeJS.Timeout;
 
-	let afterRecord: any;
+	let afterRecord = () => {};
 
 	// define noaa rtl and sox commands
 	if (pass.satellite.type === 'noaa') {
 		rtl = spawn('rtl_fm', ['-M', 'fm', '-f', pass.satellite.frequency.toString(), '-s', pass.satellite.samplerate.toString(), '-g', pass.satellite.gain.toString(), '-E', 'deemp', '-E', 'dc', '-F', '9', '-']);
 		sox = spawn('sox', ['-t', 'raw', '-r', pass.satellite.samplerate.toString(), '-c', '1', '-e', 's', '-b', '16', '-', '-t', 'wav', path.resolve(passPath, passName + '.pregain.wav'), 'rate', '11025']);
-		afterRecord = () => {
-			processNOAA(config, pass, passPath, passName);
+		if (!pass.satellite.skipProcessing) {
+			afterRecord = () => {
+				processNOAA(config, pass, passPath, passName);
+			};
+		} else {
+			console.log('Skip processing flag set!');
 		};
 	// define meteor rtl and sox commands
 	} else if (pass.satellite.type === 'meteor') {
 		rtl = spawn('rtl_fm', ['-M', 'raw', '-f', pass.satellite.frequency.toString(), '-s', pass.satellite.samplerate.toString(), '-g', pass.satellite.gain.toString(), '-E', 'dc', '-']);
 		sox = spawn('sox', ['-t', 'raw', '-r', pass.satellite.samplerate.toString(), '-c', '2', '-e', 's', '-b', '16', '-', '-t', 'wav', path.resolve(passPath, passName + '.raw.wav'), 'rate', pass.satellite.samplerate.toString()]);
-		afterRecord = () => {
-			processMETEOR(config, pass, passPath, passName);
+		if (!pass.satellite.skipProcessing) {
+			afterRecord = () => {
+				processMETEOR(config, pass, passPath, passName);
+			};
+		} else {
+			console.log('Skip processing flag set!');
 		};
 	} else {
 		console.error(`ERROR: Unknown satellite type ${pass.satellite.type}`);

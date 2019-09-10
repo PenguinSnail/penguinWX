@@ -2,6 +2,8 @@ import * as path from 'path';
 
 // define valid satellite types
 const satTypes = ['noaa', 'meteor'];
+// define valid modulation types (for METEOR)
+const modTypes = ['qpsk', 'oqpsk'];
 
 export class satellite {
 	name: string
@@ -9,6 +11,8 @@ export class satellite {
 	frequency: number
 	samplerate: number
 	gain: number
+	modulation?: string
+	apid?: string
 	minElevation: number
 	maxEclipseDepth?: number
 	priority?: number
@@ -53,6 +57,8 @@ export class satellite {
 		frequency: number
 		samplerate: number
 		gain: number
+		modulation?: string
+		apid?: string
 		minElevation?: number
 		maxEclipseDepth?: number
 		priority?: number
@@ -119,6 +125,36 @@ export class satellite {
 			process.exit(1);
 		} else {
 			this.gain = data.gain;
+		};
+
+		if (data.type === 'meteor') {
+			if (!data.modulation) {
+				console.warn(`SATELLITE (${data.name}): METEOR satellite modulation not specified!\nDefaulting to ${modTypes[0]}\n`);
+				this.modulation = modTypes[0];
+			} else if (typeof(data.modulation) !== 'string') {
+				console.error(`SATELLITE ERROR (${data.name}): METEOR satellite modulation is not a string!`);
+				process.exit(1);
+			} else if (!modTypes.includes(data.modulation)) {
+				console.error(`SATELLITE ERROR (${data.name}): ${data.modulation} is not a valid METEOR satellite modulation!\nValid modulations: ${modTypes}`);
+				process.exit(1);
+			} else {
+				this.modulation = data.modulation;
+			};
+		};
+
+		if (data.type === 'meteor') {
+			if (!data.apid) {
+				console.warn(`SATELLITE (${data.name}): METEOR satellite APIDs not specified!\nDefaulting to 66,65,64\n`);
+				this.apid = '66,65,64';
+			} else if (typeof(data.apid) !== 'string') {
+				console.error(`SATELLITE ERROR (${data.name}): METEOR satellite APID field is not a string!`);
+				process.exit(1);
+			} else if (data.apid.split(',').length !== 3) {
+				console.error(`SATELLITE ERROR (${data.name}): METEOR satellite APID field doesn't contain 3 comma separated values!`);
+				process.exit(1);
+			} else {
+				this.apid = data.apid;
+			};
 		};
 
 		// does the satellite have a minElevation defined?
@@ -304,12 +340,12 @@ export class config {
 	location: number[]
 	dataDir: string
 	tleFile: string
-	emailSettings: {
+	emailSettings?: {
 		user: string
 		pass: string
 		receiveAddress: string
 	}
-	twitterSettings: {
+	twitterSettings?: {
 		consumer_key: string
 		consumer_secret: string
 		access_token: string
@@ -321,12 +357,12 @@ export class config {
 		tleURL: string
 		location: number[]
 		dataDir: string
-		emailSettings: {
+		emailSettings?: {
 			user: string
 			pass: string
 			receiveAddress: string
 		}
-		twitterSettings: {
+		twitterSettings?: {
 			consumer_key: string
 			consumer_secret: string
 			access_token: string

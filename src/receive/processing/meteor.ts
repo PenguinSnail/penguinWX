@@ -18,7 +18,7 @@ export default (config: classes.config, pass: classes.pass, passPath: string, pa
 	console.log('Processing NOAA satellite...');
 
 	// demodulate the QPSK modulated signal to a sample file
-	let demod = spawn('meteor_demod', ['-o', path.resolve(passPath, passName + '.s'), '-B', path.resolve(passPath, passName + '.raw.wav')]);
+	let demod = spawn('meteor_demod', ['-o', path.resolve(passPath, passName + '.s'), pass.satellite.modulation ? '-m' : '', pass.satellite.modulation ? pass.satellite.modulation : '', '-B', path.resolve(passPath, passName + '.raw.wav')]);
 	demod.stdout.on('data', (data) => {
 		console.log(data.toString());
 	});
@@ -29,7 +29,7 @@ export default (config: classes.config, pass: classes.pass, passPath: string, pa
 	// after demodulating
 	demod.on('exit', () => {
 		// decode the sample file (output composite, write stat file, and manually specify APIDs)
-		let decode = spawn('meteor_decode', ['-o', path.resolve(passPath, passName + '.png'), '-q', '-s', '-a', '66,65,64', path.resolve(passPath, passName + '.s')]);
+		let decode = spawn('meteor_decode', ['-o', path.resolve(passPath, passName + '.png'), '-q', '-s', pass.satellite.apid ? '-a' : '', pass.satellite.apid ? pass.satellite.apid : '', path.resolve(passPath, passName + '.s')]);
 		decode.stdout.on('data', (data) => {
 			console.log(data.toString());
 		});

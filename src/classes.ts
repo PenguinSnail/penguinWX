@@ -127,13 +127,17 @@ export class satellite {
 			this.gain = data.gain;
 		};
 
+		// if we're a meteor satellite
 		if (data.type === 'meteor') {
+			// was modulation type specified?
 			if (!data.modulation) {
 				console.warn(`SATELLITE (${data.name}): METEOR satellite modulation not specified!\nDefaulting to ${modTypes[0]}\n`);
 				this.modulation = modTypes[0];
+			// is modulation type a string?
 			} else if (typeof(data.modulation) !== 'string') {
 				console.error(`SATELLITE ERROR (${data.name}): METEOR satellite modulation is not a string!`);
 				process.exit(1);
+			// is modultion type a known type?
 			} else if (!modTypes.includes(data.modulation)) {
 				console.error(`SATELLITE ERROR (${data.name}): ${data.modulation} is not a valid METEOR satellite modulation!\nValid modulations: ${modTypes}`);
 				process.exit(1);
@@ -142,13 +146,17 @@ export class satellite {
 			};
 		};
 
+		// if we're a meteor satellite
 		if (data.type === 'meteor') {
+			// were APIDs specified?
 			if (!data.apid) {
 				console.warn(`SATELLITE (${data.name}): METEOR satellite APIDs not specified!\nDefaulting to 66,65,64\n`);
 				this.apid = '66,65,64';
+			// is the APID field a string?
 			} else if (typeof(data.apid) !== 'string') {
 				console.error(`SATELLITE ERROR (${data.name}): METEOR satellite APID field is not a string!`);
 				process.exit(1);
+			// is the APID field properly formatted? (3 comma separated parts)
 			} else if (data.apid.split(',').length !== 3) {
 				console.error(`SATELLITE ERROR (${data.name}): METEOR satellite APID field doesn't contain 3 comma separated values!`);
 				process.exit(1);

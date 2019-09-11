@@ -348,11 +348,6 @@ export class config {
 	location: number[]
 	dataDir: string
 	tleFile: string
-	emailSettings?: {
-		user: string
-		pass: string
-		receiveAddress: string
-	}
 	twitterSettings?: {
 		consumer_key: string
 		consumer_secret: string
@@ -365,11 +360,6 @@ export class config {
 		tleURL: string
 		location: number[]
 		dataDir: string
-		emailSettings?: {
-			user: string
-			pass: string
-			receiveAddress: string
-		}
 		twitterSettings?: {
 			consumer_key: string
 			consumer_secret: string
@@ -426,43 +416,6 @@ export class config {
 			process.exit(1);
 		} else {
 			this.dataDir = path.resolve(data.dataDir);
-		};
-
-		// does emailsettings exist?
-		if (data.emailSettings) {
-			// is emailsettings an object?
-			if (typeof(data.emailSettings) !== 'object') {
-				console.error('CONFIG ERROR: emailSettings is not an object!');
-				process.exit(1);
-			// if it's an object does user field exist?
-			} else if (!data.emailSettings.user) {
-				console.error('CONFIG ERROR: no user proerty in emailSettings!');
-				process.exit(1);
-			// does pass field exist?
-			} else if (!data.emailSettings.pass) {
-				console.error('CONFIG ERROR: no pass proerty in emailSettings!');
-				process.exit(1);
-			// does receiveAddress exist?
-			} else if (!data.emailSettings.receiveAddress) {
-				console.error('CONFIG ERROR: no receiveAddress proerty in emailSettings!');
-				process.exit(1);
-			} else {
-				// is user a string
-				if (typeof(data.emailSettings.user) !== 'string') {
-					console.error('CONFIG ERROR: emailSettings.user property is not a string!');
-					process.exit(1);
-				// is pass a string
-				} else if (typeof(data.emailSettings.pass) !== 'string') {
-					console.error('CONFIG ERROR: emailSettings.pass property is not a string!');
-					process.exit(1);
-				// is receiveAddress a string
-				} else if (typeof(data.emailSettings.receiveAddress) !== 'string') {
-					console.error('CONFIG ERROR: emailSettings.receiveAddress is not a string!');
-					process.exit(1);
-				} else {
-					this.emailSettings = data.emailSettings;
-				};
-			};
 		};
 
 		// does twittersettings exist?

@@ -1,45 +1,51 @@
 {
 	"tleURL": "https://www.celestrak.com/NORAD/elements/weather.txt",
-	"location": [20.0000, -10.0000, 100],
+	"location": [20.0000, -90.0000, 100],
 	"dataDir": "./data",
-	"email": {
+	"emailSettings": {
 		"user": "bob@gmail.com",
 		"pass": "secretpassword",
 		"receiveAddress": "youremail@domain.com"
 	},
-	"twitter": {
-		"consumer_key": "XXXX",
-		"consumer_secret": "XXXX",
-		"access_token": "XXXX",
-		"access_token_secret": "XXXX"
+	"twitterSettings": {
+		"consumer_key": "xxxx",
+		"consumer_secret": "xxxx",
+		"access_token": "xxxx",
+		"access_token_secret": "xxx"
 	},
 	"satellites": [
 		{
 			"name": "NOAA 19",
-			"noaa": true,
-			"freq": 137100000,
+			"type": "noaa",
+			"frequency": 137100000,
 			"samplerate": 60000,
-			"gain": 35,
-			"email": false,
-			"tweet": false
+			"gain": 40,
+			"tweet": true
+		},
+		{
+			"name": "NOAA 15",
+			"type": "noaa",
+			"frequency": 137620000,
+			"samplerate": 60000,
+			"gain": 40,
+			"tweet": true
 		},
 		{
 			"name": "NOAA 18",
-			"noaa": true,
-			"freq": 137912500,
+			"type": "noaa",
+			"frequency": 137912500,
 			"samplerate": 60000,
-			"gain": 35,
-			"email": false,
-			"tweet": false
+			"gain": 40,
+			"tweet": true
 		},
 		{
 			"name": "METEOR-M 2",
-			"noaa": false,
-			"freq": 137100000,
+			"type": "meteor",
+			"frequency": 137100000,
 			"samplerate": 150000,
-			"gain": 40,
-			"email": false,
-			"tweet": false
+			"gain": 45,
+			"tweet": true,
+			"maxEclipseDepth": -25
 		}
 	]
 }

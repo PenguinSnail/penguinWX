@@ -29,7 +29,9 @@ export default (config: classes.config, pass: classes.pass, passPath: string, pa
 	// after demodulating
 	demod.on('exit', () => {
 		// decode the sample file (output composite, write stat file, and manually specify APIDs)
-		let decode = spawn('meteor_decode', ['-o', path.resolve(passPath, passName + '.png'), '-q', '-s', '-a', pass.satellite.apid, path.resolve(passPath, passName + '.s')]);
+		// if the diffdecode flag is set we add the `-d` option, if it's false there's a blank element
+		// the filter after the options array removes this blank element
+		let decode = spawn('meteor_decode', ['-o', path.resolve(passPath, passName + '.png'), '-q', '-s', '-a', pass.satellite.apid, pass.satellite.diffdecode ? '-d' : '', path.resolve(passPath, passName + '.s')].filter((el) => {return el !== ''}));
 		decode.stdout.on('data', (data) => {
 			console.log(data.toString());
 		});

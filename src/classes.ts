@@ -12,6 +12,7 @@ export class satellite {
 	samplerate: number
 	gain: number
 	modulation?: string
+	diffdecode?: boolean
 	apid?: string
 	minElevation: number
 	maxEclipseDepth?: number
@@ -58,6 +59,7 @@ export class satellite {
 		samplerate: number
 		gain: number
 		modulation?: string
+		diffdecode?: boolean
 		apid?: string
 		minElevation?: number
 		maxEclipseDepth?: number
@@ -162,6 +164,22 @@ export class satellite {
 				process.exit(1);
 			} else {
 				this.apid = data.apid;
+			};
+		};
+
+		// if we're a meteor satellite
+		if (data.type === 'meteor') {
+			// was the diffdecode flag specified?
+			if (!data.diffdecode) {
+				console.warn(`SATELLITE (${data.name}): METEOR satellite diffdecode not specified!\nDefaulting to false\n`);
+				this.diffdecode = false;
+			// is the diffdecode field a boolean?
+			} else if (typeof(data.diffdecode) !== 'boolean') {
+				console.error(`SATELLITE ERROR (${data.name}): METEOR satellite diffdecode flag is not a boolean!`);
+				process.exit(1);
+			
+			} else {
+				this.diffdecode = data.diffdecode;
 			};
 		};
 

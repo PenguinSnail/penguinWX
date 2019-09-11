@@ -21,6 +21,7 @@
 - `meteor_rectify` ([https://github.com/dbdexter-dev/meteor_rectify/](https://github.com/dbdexter-dev/meteor_rectify/))
 	- requires `python3`, `python3-pil (pillow)`, `python3-numpy (numpy)`
 - `ffmpeg`
+- `imagemagick` (`mogrify` command)
 
 ### NOAA Dependencies
 

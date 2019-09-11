@@ -48,8 +48,8 @@ export default () => new Promise<void>(async (resolve, reject) => {
 		console.error('ERROR: ffmpeg not installed!');
 		failed = true;
 	});
-	await commandExists('convert').catch(() => {
-		console.error('ERROR: imagemagick/convert not installed!');
+	await commandExists('mogrify').catch(() => {
+		console.error('ERROR: imagemagick (mogrify) not installed!');
 		failed = true;
 	});
 

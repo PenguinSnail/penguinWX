@@ -170,7 +170,7 @@ export class satellite {
 		// if we're a meteor satellite
 		if (data.type === 'meteor') {
 			// was the diffdecode flag specified?
-			if (!data.diffdecode) {
+			if (data.diffdecode === undefined) {
 				console.warn(`SATELLITE (${data.name}): METEOR satellite diffdecode not specified!\nDefaulting to false\n`);
 				this.diffdecode = false;
 			// is the diffdecode field a boolean?

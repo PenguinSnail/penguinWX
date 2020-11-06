@@ -6,6 +6,9 @@ const scheduler = require('./utils/scheduler');
 
 const logger = require('./utils/logger');
 
+/**
+ * Interval definitions
+ */
 const intervals = {
 	// tles update every 24 hours
 	tleUpdate: 1000 * 60 * 60 * 24,
@@ -15,6 +18,9 @@ const intervals = {
 	schedulePasses: 1000 * 60,
 };
 
+/**
+ * Run a TLE update and log whether it succeeded or failed
+ */
 const updateTLEs = () => {
 	tle.updateTLEs().then(
 		() => {
@@ -26,6 +32,21 @@ const updateTLEs = () => {
 	);
 };
 
+/**
+ * Generate new passes and store them
+ * - read the ground position
+ * 
+ * - read stored passes
+ * - filter stored passes to only upcoming ones
+ * - get the end date for the latest scheduled pass
+ * 
+ * - get a list of stored satellites
+ * - generate 24 hours of passes for each satellite
+ * - format the passes for each satellite
+ * 
+ * - convert a total list of passes into a schedule
+ * - update each scheduled pass into the database
+ */
 const generatePasses = () => {
 	// get the ground station info
 	ground.getGround().then(
@@ -160,6 +181,9 @@ const generatePasses = () => {
 	);
 };
 
+/**
+ * Read scheduled passes and create timers to run them
+ */
 const schedulePasses = () => {
 	passes.getPasses().then(
 		allPasses => {
@@ -218,6 +242,7 @@ const schedulePasses = () => {
 	);
 };
 
+// export the main loop methods
 module.exports.updateTLEs = updateTLEs;
 module.exports.generatePasses = generatePasses;
 module.exports.schedulePasses = schedulePasses;

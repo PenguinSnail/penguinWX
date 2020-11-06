@@ -43,7 +43,7 @@ function Passes() {
 							headers: { 'Content-Type': 'application/json', 'auth-jwt': auth.token },
 							body: JSON.stringify({ action: 'schedule_new' }),
 						}).then(res => {
-							if (300 > res.status > 199) {
+							if (res.status > 199 && res.status < 300) {
 								setNotificationState({
 									open: true,
 									message: 'Queued scheduling new passes',
@@ -71,7 +71,7 @@ function Passes() {
 							headers: { 'Content-Type': 'application/json', 'auth-jwt': auth.token },
 							body: JSON.stringify({ action: 'delete_scheduled' }),
 						}).then(res => {
-							if (300 > res.status > 199) {
+							if (res.status > 199 && res.status < 300) {
 								setNotificationState({
 									open: true,
 									message: 'Deleted all scheduled passes',

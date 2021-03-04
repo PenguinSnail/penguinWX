@@ -1,28 +1,31 @@
 {
-  "name": "penguin-wx",
-  "version": "0.0.1",
-  "description": "Utility for automatically scheduling, recieving, and processing weather satellite images",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [
-    "noaa",
-    "meteor",
-    "wx",
-    "sdr",
-    "rtlsdr",
-    "rtl-sdr"
-  ],
-  "author": "Noah Piraino <penguinsnail@onebuttonmouse.com>",
-  "license": "GPL-3.0",
-  "dependencies": {
-    "@types/twit": "^2.2.22",
-    "command-exists": "^1.2.8",
-    "del": "^5.1.0",
-    "jspredict": "^1.0.3",
-    "nodemailer": "^6.3.0",
-    "twit": "^2.2.11",
-    "typescript": "^3.6.2"
-  }
+	"name": "penguinwx",
+	"version": "1.0.0",
+	"description": "An automated LEO weather satellite image reception tool",
+	"main": "index.js",
+	"scripts": {
+		"start": "./node_modules/.bin/tsc && node ./dist/main.js",
+		"lint": "./node_modules/.bin/tslint --project ./",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/PenguinSnail/penguinWX.git"
+	},
+	"author": "Noah Piraino <noahapiraino@gmail.com>",
+	"license": "AGPL-3.0",
+	"bugs": {
+		"url": "https://github.com/PenguinSnail/penguinWX/issues"
+	},
+	"homepage": "https://github.com/PenguinSnail/penguinWX#readme",
+	"devDependencies": {
+		"@typescript-eslint/eslint-plugin": "^4.16.1",
+		"@typescript-eslint/parser": "^4.16.1",
+		"eslint": "^7.21.0",
+		"typescript": "^4.2.2"
+	},
+	"dependencies": {
+		"jspredict": "^1.1.1",
+		"tslog": "^3.1.1"
+	}
 }
